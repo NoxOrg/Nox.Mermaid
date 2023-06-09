@@ -1,9 +1,5 @@
 #
 # sample.solution.nox.yaml
-#
-# yaml-language-server: $schema=../schemas/solution.json
-#
-
 
 name: SampleService
 
@@ -29,6 +25,11 @@ domain:
           description: is also know as
           relationship: OneOrMany
           entity: CountryLocalNames
+          
+      keys:
+        - name: Id
+          description: The country's unique identifier
+          type: autoNumber
 
       attributes:
 
@@ -153,6 +154,15 @@ domain:
 
     - name: CountryLocalNames
       description: The name of a country in other languages
+      
+      attributes:
+        
+        - name: LocaleCode
+          type: text
+          textTypeOptions:
+            minLength: 2
+            maxLength: 2
+            
 
     - name: CurrencyCashBalance
 
@@ -190,56 +200,6 @@ domain:
             decimalDigits: 4
           isRequired: false
 
-application:
-  dataTransferObjects:
-    - name: CountryDto
-      description: Dto for country information
-      attributes:
-        - name: Id
-          description: The identity of the country, the Iso Alpha 2 code
-          type: text
-          textTypeOptions:
-            characterCasing: lower
-            maxLength: 2
-            minLength: 2
 
-  integration:
-    - name: SampleEtl
-      description: a Sample Etl
-      source:
-        name: SampleEtlDataSource
-        description: Sources Country data from a json file
-        dataConnection: CountryJsonData
-        schedule:
-          start: every day at 2am
-          retry:
-            limit: 5
-            delaySeconds: 5
-            doubleDelayLimit: 10
-          runOnStartup: true
-        watermark:
-          dateColumns:
-            - "CreateDate"
-            - "EditDate"
-          sequentialKeyColumn: CountryId
-      transform:
-        map:
-          - sourceColumn: IsoAlpha2Code
-            targetAttribute: Id
-            converter: upperCase
-          - sourceColumn: CountryName
-            targetAttribute: Name
-          - sourceColumn: CountryFullName
-            targetAttribute: FormalName
-        lookup:
-          - sourceColumn: RegionId
-            match:
-              table: GeoRegions
-              lookupColumn: Id
-              returnColumn: Name
-            targetAttribute: GeoRegion
-      target:
-        name: ???
-        dataConnection: Nox #This points to Nox entity store
 
 

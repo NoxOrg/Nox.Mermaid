@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nox.Mermaid", "Nox.Mermaid\Nox.Mermaid.csproj", "{6D2769D1-BA9F-4C60-B4F8-A8CA8E0EFFC8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErdTests", "..\tests\ErdTests\ErdTests.csproj", "{DA7C21DF-D12A-42E3-AE5C-745FBCB83BD8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{909DAC04-85D7-4599-AA6E-78D3CAA678F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,12 @@ Global
 		{6D2769D1-BA9F-4C60-B4F8-A8CA8E0EFFC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D2769D1-BA9F-4C60-B4F8-A8CA8E0EFFC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D2769D1-BA9F-4C60-B4F8-A8CA8E0EFFC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA7C21DF-D12A-42E3-AE5C-745FBCB83BD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA7C21DF-D12A-42E3-AE5C-745FBCB83BD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA7C21DF-D12A-42E3-AE5C-745FBCB83BD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA7C21DF-D12A-42E3-AE5C-745FBCB83BD8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DA7C21DF-D12A-42E3-AE5C-745FBCB83BD8} = {909DAC04-85D7-4599-AA6E-78D3CAA678F0}
 	EndGlobalSection
 EndGlobal
