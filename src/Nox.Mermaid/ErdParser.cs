@@ -1,4 +1,6 @@
 using Nox.Mermaid.Exceptions;
+using Nox.Solution;
+using Nox.Types;
 
 namespace Nox.Mermaid;
 
@@ -6,12 +8,12 @@ public class ErdParser
 {
     private readonly IEnumerable<Entity> _entities;
 
-    public ErdParser(NoxConfiguration noxConfiguration)
+    public ErdParser(NoxSolution solution)
     {
-        if (noxConfiguration.Solution == null) throw new NoxErdParserException("Cannot render mermaid ER diagram. solution in Nox configuration is null");
-        if (noxConfiguration.Solution.Domain == null) throw new NoxErdParserException("Cannot render mermaid ER diagram. domain in Nox configuration is null");
-        if (noxConfiguration.Solution.Domain.Entities == null) throw new NoxErdParserException("Cannot render mermaid ER diagram. No entities defined in Nox domain configuration");
-        _entities = noxConfiguration.Solution.Domain.Entities;
+        if (solution == null) throw new NoxErdParserException("Cannot render mermaid ER diagram. solution in Nox configuration is null");
+        if (solution.Domain == null) throw new NoxErdParserException("Cannot render mermaid ER diagram. domain in Nox configuration is null");
+        if (solution.Domain.Entities == null) throw new NoxErdParserException("Cannot render mermaid ER diagram. No entities defined in Nox domain configuration");
+        _entities = solution.Domain.Entities;
         
     }
 
@@ -30,7 +32,7 @@ public class ErdParser
         {
             lines.Add($"    {entity.Name} {{");
             AddKeys(lines, entity);
-            AddAttributes(lines, entity.Attributes);
+            AddAttributes(lines, entity.Attributes!);
             lines.Add("    }");
             AddRelationships(lines, entity);
         }
@@ -51,7 +53,7 @@ public class ErdParser
                 var keyType = "";
                 switch (key.Type)
                 {
-                    case NoxType.entity:
+                    case NoxType.Entity:
                         keyType = "FK";
                         break;
                     default:
@@ -64,14 +66,11 @@ public class ErdParser
         }
     }
 
-    private void AddAttributes(List<string> lines, List<NoxSimpleTypeDefinition>? attributes)
+    private void AddAttributes(List<string> lines, IReadOnlyList<NoxSimpleTypeDefinition> attributes)
     {
-        if (attributes != null)
+        foreach (var attr in attributes)
         {
-            foreach (var attr in attributes)
-            {
-                lines.Add($"        {attr.Type} {attr.Name}");
-            }
+            lines.Add($"        {attr.Type} {attr.Name}");
         }
     }
 
@@ -81,7 +80,7 @@ public class ErdParser
         {
             foreach (var relationship in entity.Relationships)
             {
-                var label = GetRelationshipLabel(relationship.Relationship!.Value);
+                var label = GetRelationshipLabel(relationship.Relationship);
                 lines.Add($"    {entity.Name} {label} {relationship.Entity} : \"{relationship.Description}\"");
             }
         }
@@ -90,7 +89,7 @@ public class ErdParser
         {
             foreach (var relationship in entity.OwnedRelationships)
             {
-                var label = GetRelationshipLabel(relationship.Relationship!.Value);
+                var label = GetRelationshipLabel(relationship.Relationship);
                 lines.Add($"    {entity.Name} {label} {relationship.Entity} : \"{relationship.Description}\"");
             }
         }
